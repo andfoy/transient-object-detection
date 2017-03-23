@@ -43,6 +43,7 @@ def process_labels(path, prefix):
     files = glob.glob(osp.join(path, prefix))
     bar = progressbar.ProgressBar(capture_stdout=True)
     for file in bar(files):
+        print(file)
         filename = osp.basename(file)
         seq = filename.split('-')[1]
         if seq not in sequences:
