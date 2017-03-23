@@ -31,7 +31,7 @@ params = {
 
 def retrieve_label(ra, dec):
     params['Coord'] = '{0} {1}'.format(ra, dec)
-    soup = BeautifulSoup(requests.get(URL, params=params).text)
+    soup = BeautifulSoup(requests.get(URL, params=params).text, 'lxml')
     tab = soup.find('td', attrs={'id': 'basic_data'})
     label = tab.find_all('td')[0].find('font').find('b').next.next
     label = label.split('\n')[2]
@@ -41,8 +41,9 @@ def retrieve_label(ra, dec):
 def process_labels(path, prefix):
     sequences = {}
     files = glob.glob(osp.join(path, prefix))
-    bar = progressbar.ProgressBar()
+    bar = progressbar.ProgressBar(capture_stdout=True)
     for file in bar(files):
+        print(file)
         filename = osp.basename(file)
         seq = filename.split('-')[1]
         if seq not in sequences:
