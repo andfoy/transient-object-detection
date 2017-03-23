@@ -47,17 +47,17 @@ def process_labels(path, prefix):
     files = sorted(glob.glob(osp.join(path, prefix)))
     bar = progressbar.ProgressBar(redirect_stdout=True)
     for file in bar(files):
-        print(file)
         filename = osp.basename(file)
         seq = filename.split('-')[1]
         if seq not in sequences:
+            print(file)
             hdulist = fits.open(file)
             wcs_conv = wcs.WCS(hdulist[1])
             ra, dec = wcs_conv.wcs_pix2world(0, 0, True)
             print(ra, dec)
             sequences[seq] = retrieve_label(ra, dec)
 
-    with open('labels.csv', 'r') as fp:
+    with open('labels.csv', 'w') as fp:
         fp.write('obj,type\n')
         for obj in sequences:
             fp.write('{0},{1}\n'.format(obj, sequences[obj]))
