@@ -45,7 +45,7 @@ def retrieve_label(ra, dec):
 def process_labels(path, prefix):
     sequences = {}
     files = glob.glob(osp.join(path, prefix))
-    bar = progressbar.ProgressBar(capture_stdout=True)
+    bar = progressbar.ProgressBar(redirect_stdout=True)
     for file in bar(files):
         print(file)
         filename = osp.basename(file)
