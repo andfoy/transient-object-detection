@@ -50,6 +50,7 @@ def process_labels(path, prefix):
             hdulist = fits.open(file)
             wcs_conv = wcs.WCS(hdulist[1])
             ra, dec = wcs_conv.wcs_pix2world(0, 0, True)
+            print(ra, dec)
             sequences[seq] = retrieve_label(ra, dec)
 
     with open('labels.csv', 'r') as fp:
