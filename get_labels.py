@@ -33,8 +33,12 @@ def retrieve_label(ra, dec):
     params['Coord'] = '{0} {1}'.format(ra, dec)
     soup = BeautifulSoup(requests.get(URL, params=params).text, 'lxml')
     tab = soup.find('td', attrs={'id': 'basic_data'})
-    label = tab.find_all('td')[0].find('font').find('b').next.next
-    label = label.split('\n')[2]
+    try:
+        label = tab.find_all('td')[0].find('font').find('b').next.next
+        label = label.split('\n')[2]
+    except AttributeError:
+        label = 'Other'
+    print(label)
     return label
 
 
