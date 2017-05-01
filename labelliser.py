@@ -211,13 +211,14 @@ class MainWindow(QWidget):
     IMAGE_SIZE = 180
 
     def __init__(self, light_curves, it_object, doc_label,
-                 cal_path, diff_path):
+                 cal_path, diff_path, time_interval):
         super(MainWindow, self).__init__(None)
         self.doc_label = doc_label
         self.light_curves = light_curves
         self.it_object = it_object
         self.cal_path = cal_path
         self.diff_path = diff_path
+        self.time_interval = time_interval
         if hasattr(self, 'bigLayout'):
             self.clearLayout(self.bigLayout)
         self.setUpWindows()
@@ -387,7 +388,7 @@ if __name__ == '__main__':
     time_interval = 7
 
     main = MainWindow(light_curves, 0, doc_label, cal_path,
-                      diff_path)
+                      diff_path, time_interval)
     main.resize(800, 700)
     main.show()
     app.exec_()
