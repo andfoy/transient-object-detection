@@ -231,7 +231,7 @@ class MainWindow(QWidget):
             self.it_object = self.it_object - 2
             self.passeImage()
         if key == Qt.Key_S:
-            doc_label.save()
+            self.doc_label.save()
 
         label = -1
         if key == Qt.Key_W:
@@ -241,11 +241,11 @@ class MainWindow(QWidget):
         if key == Qt.Key_C:
             label = 2
         if label != -1:
-            id_objet, liste_temps = self.light_curves.object_info(
+            object_id, time_list = self.light_curves.object_info(
                 self.it_object)
-            _id = '{0}_{1}'.format(id_objet, self.it_object)
-            doc_label.add_object(_id, str(label))
-            doc_label.save()
+            _id = '{0}_{1}'.format(object_id, self.it_object)
+            self.doc_label.add_object(_id, str(label))
+            self.doc_label.save()
             self.add_button.setText("A, Q, S :::: Label=" + str(label))
             self.passeImage()
 
@@ -257,11 +257,11 @@ class MainWindow(QWidget):
         if key == Qt.Key_M:
             label = 2
         if label != -1:
-            id_objet, liste_temps = self.light_curves.object_info(
+            object_id, time_list = self.light_curves.object_info(
                 self.it_object)
-            _id = '{0}_{1}'.format(id_objet, self.it_object)
-            doc_label.change_object(_id, str(label))
-            doc_label.save()
+            _id = '{0}_{1}'.format(object_id, self.it_object)
+            self.doc_label.change_object(_id, str(label))
+            self.doc_label.save()
             self.add_button.setText("A, Q, S :::: Label=" + str(label))
             self.passeImage()
 
@@ -278,20 +278,20 @@ class MainWindow(QWidget):
                 self.clearLayout(child.layout())
 
     def setUpWindows(self):
-        id_objet, liste_temps = self.light_curves.object_info(self.it_object)
-        _id = '{0}_{1}'.format(id_objet, self.it_object)
-        labelActuel = self.doc_label.find_object(_id)
+        object_id, time_list = self.light_curves.object_info(self.it_object)
+        _id = '{0}_{1}'.format(object_id, self.it_object)
+        current_label = self.doc_label.find_object(_id)
 
         position = 1
         # espaceJourMinRequis = 1.0
-        dernierTemps = liste_temps[0]
-        nbLigne = 1
-        listeATraiter = [0]
-        for i in range(0, len(liste_temps)):
-            if dernierTemps + self.time_interval < liste_temps[i]:
-                nbLigne += 1
-                dernierTemps = liste_temps[i]
-                listeATraiter.append(i)
+        prev_time = time_list[0]
+        line_num = 1
+        process_list = [0]
+        for i in range(0, len(time_list)):
+            if prev_time + self.time_interval < time_list[i]:
+                line_num += 1
+                prev_time = time_list[i]
+                process_list.append(i)
 
         if hasattr(self, 'bigLayout'):
             self.clearLayout(self.bigLayout)
@@ -301,11 +301,11 @@ class MainWindow(QWidget):
         self.scrollArea = QScrollArea(self)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        rect = QRect(0, 0, 800, nbLigne * self.IMAGE_SIZE)
+        rect = QRect(0, 0, 800, line_num * self.IMAGE_SIZE)
         self.scrollAreaWidgetContents.setGeometry(rect)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.add_button = QPushButton("A, Q, S :::: Label=" + str(labelActuel))
+        self.add_button = QPushButton("A, Q, S :::: Label=" + str(current_label))
 
         self.bigLayout.addWidget(self.add_button)
         self.bigLayout.addWidget(self.scrollArea)
@@ -318,12 +318,12 @@ class MainWindow(QWidget):
         self.layoutVertical.addLayout(self.layoutDroit)
 
         err = 0
-        for i in listeATraiter:
-            nom = '{0}-{1}.fits'.format(id_objet, i)
+        for i in process_list:
+            nom = '{0}-{1}.fits'.format(object_id, i)
             prefix_cal_path = self.cal_path + nom
             prefix_diff_path = self.diff_path + nom
 
-            print(str(id_objet), "  :::: ", prefix_cal_path)
+            print(str(object_id), "  :::: ", prefix_cal_path)
             layout_tmp = QHBoxLayout(None)
 
             path_1 = osp.exists(prefix_cal_path)
@@ -339,7 +339,7 @@ class MainWindow(QWidget):
                 axe = widget_cal_tmp.axes
                 img1 = ImgFit(prefix_cal_path)
                 object_curves = self.light_curves.temps[self.it_object]
-                light_curve = object_curves[liste_temps[i]]
+                light_curve = object_curves[time_list[i]]
                 img1.draw(axe, "Cal t = {0}".format(light_curve))
 
                 widget_dif_tmp = MatplotlibWidget(self.IMAGE_SIZE,
