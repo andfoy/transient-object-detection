@@ -137,8 +137,8 @@ class LightCurves(object):
     def num_objects(self):
         return len(self.ra)
 
-    def object_info(self, objet_num):
-        return self.id_names[objet_num][0], self.id_temps[objet_num]
+    def object_info(self, num_object):
+        return self.id_names[num_object][0], self.id_times[num_object]
 
 
 class OutputFile:
