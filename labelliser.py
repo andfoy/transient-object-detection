@@ -338,7 +338,7 @@ class MainWindow(QWidget):
                                                   self.IMAGE_SIZE, None)
                 axe = widget_cal_tmp.axes
                 img1 = ImgFit(prefix_cal_path)
-                object_curves = self.light_curves.temps[self.it_object]
+                object_curves = self.light_curves.times[self.it_object]
                 light_curve = object_curves[time_list[i]]
                 img1.draw(axe, "Cal t = {0}".format(light_curve))
 
