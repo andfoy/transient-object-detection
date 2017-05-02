@@ -273,8 +273,14 @@ class MainWindow(QWidget):
             self.passeImage()
 
     def passeImage(self):
-        self.it_object = self.it_object + 1
-        self.setUpWindows()
+        exists = False
+        while not exists:
+            self.it_object = self.it_object + 1
+            try:
+                self.setUpWindows()
+            except Exception:
+                continue
+            break
 
     def clearLayout(self, layout):
         while layout.count():
@@ -375,9 +381,9 @@ class MainWindow(QWidget):
     def img_clicked(self, idx):
         # print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
-        mag = self.light_curves.object_mag(self.it_object)
-        print(mag.data.shape)
-        print(time_list[idx])
+        mag = self.light_curves.object_mag(self.it_object).data
+        # print(mag.data.shape)
+        off = time_list[idx]
 
 
 if __name__ == '__main__':
