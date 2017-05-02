@@ -131,7 +131,7 @@ class LightCurves(object):
         mag = mag[obj_num - 8:obj_num]
         print("Update?")
         # self.current_axes
-        self.current_axes.clear()
+        # self.current_axes.clear()
         self.current_axes.scatter(times, mag, color='r', zorder=1)
 
     def num_objects(self):
@@ -202,7 +202,6 @@ class MatplotlibWidget(FigureCanvas):
 
     def __init__(self, width, height, _id=-1, parent=None):
         self.fig = Figure()  # figsize=(width, height)
-        self.fig.hold(True)
         self.id = _id
         self.axes = self.fig.add_subplot(111)
 
