@@ -211,16 +211,16 @@ class MatplotlibWidget(FigureCanvas):
         self.setAttribute(Qt.WA_Hover)
 
     def enterEvent(self, event):
-        print("I'm in!")
+        # print("I'm in!")
         self.sig_clicked_img.emit(self.id)
         FigureCanvas.enterEvent(self, event)
 
     def leaveEvent(self, event):
-        print("I'm out!")
+        # print("I'm out!")
         FigureCanvas.leaveEvent(self, event)
 
     def mousePressEvent(self, event):
-        print("Click!")
+        # print("Click!")
         self.sig_clicked_img.emit(self.id)
         FigureCanvas.mousePressEvent(self, event)
 
@@ -384,7 +384,9 @@ class MainWindow(QWidget):
 
     @Slot(int)
     def img_clicked(self, idx):
-        print(idx)
+        # print(idx)
+        object_id, time_list = self.light_curves.object_info(self.it_object)
+        print(time_list[idx])
 
 
 if __name__ == '__main__':
