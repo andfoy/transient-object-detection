@@ -338,7 +338,9 @@ class MainWindow(QWidget):
 
         self.layoutVertical = QHBoxLayout(self.scrollAreaWidgetContents)
 
-        self.layoutGauche = QVBoxLayout(None)
+        left_scroller = QScrollArea(self)
+        left_scroller.setWidgetResizable(True)
+        self.layoutGauche = QVBoxLayout(left_scroller)
         self.layoutDroit = QVBoxLayout(None)
         self.layoutVertical.addLayout(self.layoutGauche)
         self.layoutVertical.addLayout(self.layoutDroit)
