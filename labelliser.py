@@ -207,11 +207,11 @@ class MatplotlibWidget(FigureCanvas):
         self.setMaximumSize(QSize(width, height))
         self.setAttribute(Qt.WA_Hover)
 
-    def enterEvent(event):
+    def enterEvent(self, event):
         print("I'm in!")
         FigureCanvas.enterEvent(self, event)
 
-    def leaveEvent(event):
+    def leaveEvent(self, event):
         print("I'm out!")
         FigureCanvas.leaveEvent(self, event)
 
