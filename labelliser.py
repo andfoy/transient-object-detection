@@ -18,7 +18,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from qtpy.QtWidgets import (QWidget, QVBoxLayout, QScrollArea,
                             QPushButton, QHBoxLayout, QApplication,
-                            QLabel)
+                            QLabel, QFrame)
 from qtpy.QtCore import Qt, QRect, QSize, Signal, Slot
 # from qtpy.QtGui import QKeySequence
 # from PyQt5 import QtGui, QtCore, QtWidgets
@@ -340,9 +340,12 @@ class MainWindow(QWidget):
 
         left_scroller = QScrollArea(self)
         left_scroller.setWidgetResizable(True)
-        self.layoutGauche = QVBoxLayout(left_scroller)
+        left_frame = QFrame(left_scroller)
+        self.layoutGauche = QVBoxLayout()
+        left_frame.setLayout(self.layoutGauche)
         self.layoutDroit = QVBoxLayout(None)
-        self.layoutVertical.addLayout(self.layoutGauche)
+        self.layoutVertical.addWidget(left_frame)
+        # self.layoutVertical.addLayout(self.layoutGauche)
         self.layoutVertical.addLayout(self.layoutDroit)
 
         err = 0
