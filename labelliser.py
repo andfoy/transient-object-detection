@@ -355,7 +355,7 @@ class MainWindow(QWidget):
 
         self.bigLayout.addWidget(self.add_button)
         obj_type = "Object type: {0}".format(self.labels[object_id])
-        self.bigLayout.addWidget(QLabel(obj_type), self)
+        self.bigLayout.addWidget(QLabel(obj_type, self))
         self.bigLayout.addWidget(self.scrollArea)
 
         self.layoutVertical = QHBoxLayout(self.scrollAreaWidgetContents)
@@ -477,7 +477,7 @@ if __name__ == '__main__':
     time_interval = 7
 
     main = MainWindow(light_curves, 0, doc_label, cal_path,
-                      diff_path, time_interval)
+                      diff_path, time_interval, labels)
     main.resize(800, 700)
     main.show()
     app.exec_()
