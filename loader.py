@@ -4,7 +4,7 @@ import os.path as osp
 from astropy.io import fits
 import torch.utils.data as data
 
-IMG_EXTENSIONS = ['fits']
+IMG_EXTENSIONS = ['.fits']
 EXTTYPE = 'EXTTYPE'
 IMAGE = 'IMAGE'
 
@@ -13,9 +13,7 @@ def make_dataset(dir):
     images = []
     for path, _, files in os.walk(dir):
         for filename in files:
-            print(filename)
             name, ext = osp.splitext(filename)
-            print(ext)
             if ext in IMG_EXTENSIONS:
                 filename = osp.join(path, filename)
                 images.append(filename)
