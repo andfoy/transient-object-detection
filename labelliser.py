@@ -71,6 +71,7 @@ class LightCurves(object):
         self.times = []
         self.id_names = []
         self.id_times = []
+        self.current_axes = None
         for obj in tmp_pickle:
             self.ra.append(obj['ra'] * 180. / pi)
             self.dec.append(obj['dec'] * 180. / pi)
@@ -111,14 +112,23 @@ class LightCurves(object):
                 self.ra[id_][times_], self.dec[id_][times_],
                 self.mag[id_][times_], self.times[id_][times_])
 
-    def draw(self, axe, obj_it, focus=False, titre=""):
-        axe.scatter(self.times[obj_it], self.mag[obj_it])
+    def draw(self, axe, obj_it, focus=None, titre=""):
+        self.current_axes = axe
+        self.current_axes.scatter(self.times[obj_it], self.mag[obj_it])
         if len(titre) < 2:
             title = 'Obj num: {0} - id: {1}'.format(obj_it,
                                                     self.id_names[obj_it][0])
-            axe.set_title(title)
+            self.current_axes.set_title(title)
         else:
-            axe.set_title(titre)
+            self.current_axes.set_title(titre)
+
+    def focus_obj(self, obj_it, obj_num):
+        # self.current_axes.hold()
+        times = self.times[obj_it].data
+        times = times[obj_num - 8:obj_num]
+        mag = self.mag[obj_it].data
+        mag = mag[obj_num - 8:obj_num]
+        self.current_axes.scatter(times, mag, color='r')
 
     def num_objects(self):
         return len(self.ra)
@@ -381,10 +391,10 @@ class MainWindow(QWidget):
     def img_clicked(self, idx):
         # print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
-        mag = self.light_curves.object_mag(self.it_object).data
-        print(mag.data.shape)
+        # mag = self.light_curves.object_mag(self.it_object).data
+        # print(mag.data.shape)
         off = time_list[idx]
-        print(off)
+        self.light_curves.focus_obj(self.it_object, off)
 
 
 if __name__ == '__main__':
