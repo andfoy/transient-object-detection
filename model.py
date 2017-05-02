@@ -73,7 +73,7 @@ class VAE(nn.Module):
         return self.sigmoid(self.fc4(h3))
 
     def forward(self, x):
-        mu, logvar = self.encode(x.view(-1, 784))
+        mu, logvar = self.encode(x.view(-1, 1024))
         z = self.reparametrize(mu, logvar)
         return self.decode(z), mu, logvar
 
