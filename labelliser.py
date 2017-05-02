@@ -212,7 +212,7 @@ class MatplotlibWidget(FigureCanvas):
 
     def enterEvent(self, event):
         print("I'm in!")
-        sig_clicked_img.emit(self.id)
+        self.sig_clicked_img.emit(self.id)
         FigureCanvas.enterEvent(self, event)
 
     def leaveEvent(self, event):
@@ -221,7 +221,7 @@ class MatplotlibWidget(FigureCanvas):
 
     def mousePressEvent(self, event):
         print("Click!")
-        sig_clicked_img.emit(self.id)
+        self.sig_clicked_img.emit(self.id)
         FigureCanvas.mousePressEvent(self, event)
 
 
