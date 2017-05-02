@@ -215,6 +215,11 @@ class MatplotlibWidget(FigureCanvas):
         print("I'm out!")
         FigureCanvas.leaveEvent(self, event)
 
+    def mousePressEvent(self, event):
+        print("Click!")
+        FigureCanvas.mousePressEvent(self, event)
+
+
 class MainWindow(QWidget):
     IMAGE_SIZE = 180
 
