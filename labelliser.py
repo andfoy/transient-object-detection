@@ -128,10 +128,13 @@ class LightCurves(object):
         times = times[obj_num - 8:obj_num]
         mag = self.mag[obj_it].data
         mag = mag[obj_num - 8:obj_num]
-        print("Update?")
         # self.current_axes
         # self.current_axes.clear()
         self.current_axes.scatter(times, mag, color='r')
+
+    def reset(self, obj_it):
+        self.current_axes.clear()
+        self.draw(self.current_axes, obj_it)
 
     def num_objects(self):
         return len(self.ra)
@@ -198,6 +201,7 @@ class OutputFile:
 
 class MatplotlibWidget(FigureCanvas):
     sig_clicked_img = Signal(int)
+    sig_leave_img = Signal()
 
     def __init__(self, width, height, _id=-1, parent=None):
         self.fig = Figure()  # figsize=(width, height)
@@ -220,6 +224,7 @@ class MatplotlibWidget(FigureCanvas):
     def leaveEvent(self, event):
         # print("I'm out!")
         FigureCanvas.leaveEvent(self, event)
+        self.sig_leave_img.emit()
 
     def mousePressEvent(self, event):
         # print("Click!")
@@ -372,6 +377,7 @@ class MainWindow(QWidget):
                                                   self.IMAGE_SIZE,
                                                   _id=i)
                 widget_dif_tmp.sig_clicked_img.connect(self.img_clicked)
+                widget_dif_tmp.sig_leave_img.connect(self.reset_graph)
                 axe = widget_dif_tmp.axes
                 img2 = ImgFit(prefix_diff_path)
                 img2.draw(axe, "Diff t = {0}".format(light_curve))
@@ -400,6 +406,10 @@ class MainWindow(QWidget):
         off = time_list[idx]
         self.light_curves.focus_obj(self.it_object, off)
         self.light_curves_plot.draw()
+
+    @Slot()
+    def reset_graph(self):
+        self.light_curves.reset(self.it_object)
 
 
 if __name__ == '__main__':
