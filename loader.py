@@ -24,7 +24,7 @@ def astropy_loader(path):
     hdulist = fits.open(path)
     img = None
     for hdu in hdulist:
-        if EXTTYPE in hdu.header():
+        if EXTTYPE in hdu.header:
             if hdu.header[EXTTYPE] == IMAGE:
                 img = hdu.data
     if img is None:
