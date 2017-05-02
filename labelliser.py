@@ -20,7 +20,7 @@ from matplotlib.figure import Figure
 from qtpy.QtWidgets import (QWidget, QVBoxLayout, QScrollArea,
                             QPushButton, QHBoxLayout, QApplication,
                             QLabel)
-from qtpy.QtCore import Qt, QRect, QSize
+from qtpy.QtCore import Qt, QRect, QSize, Signal, Slot
 # from qtpy.QtGui import QKeySequence
 # from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
@@ -125,7 +125,7 @@ class LightCurves(object):
                 self.ra[id_][times_], self.dec[id_][times_],
                 self.mag[id_][times_], self.times[id_][times_])
 
-    def draw(self, axe, obj_it, titre=""):
+    def draw(self, axe, obj_it, focus=False, titre=""):
         axe.scatter(self.times[obj_it], self.mag[obj_it])
         if len(titre) < 2:
             title = 'Obj num: {0} - id: {1}'.format(obj_it,
@@ -195,8 +195,11 @@ class OutputFile:
 
 
 class MatplotlibWidget(FigureCanvas):
-    def __init__(self, width, height, parent=None):
+    sig_clicked_img = Signal(int)
+
+    def __init__(self, width, height, _id=-1, parent=None):
         self.fig = Figure()  # figsize=(width, height)
+        self.id = _id
         self.axes = self.fig.add_subplot(111)
 
         FigureCanvas.__init__(self, self.fig)
@@ -209,6 +212,7 @@ class MatplotlibWidget(FigureCanvas):
 
     def enterEvent(self, event):
         print("I'm in!")
+        sig_clicked_img.emit(self.id)
         FigureCanvas.enterEvent(self, event)
 
     def leaveEvent(self, event):
@@ -217,6 +221,7 @@ class MatplotlibWidget(FigureCanvas):
 
     def mousePressEvent(self, event):
         print("Click!")
+        sig_clicked_img.emit(self.id)
         FigureCanvas.mousePressEvent(self, event)
 
 
@@ -356,7 +361,9 @@ class MainWindow(QWidget):
                 img1.draw(axe, "Cal t = {0}".format(light_curve))
 
                 widget_dif_tmp = MatplotlibWidget(self.IMAGE_SIZE,
-                                                  self.IMAGE_SIZE, None)
+                                                  self.IMAGE_SIZE,
+                                                  _id=i)
+                widget_dif_tmp.sig_clicked_img.connect(self.img_clicked)
                 axe = widget_dif_tmp.axes
                 img2 = ImgFit(prefix_diff_path)
                 img2.draw(axe, "Diff t = {0}".format(light_curve))
@@ -374,6 +381,10 @@ class MainWindow(QWidget):
 
         if err == 1:
             self.passeImage()
+
+    @Slot(int)
+    def img_clicked(self, idx):
+        print(idx)
 
 
 if __name__ == '__main__':
