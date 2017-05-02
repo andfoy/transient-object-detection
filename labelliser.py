@@ -114,8 +114,7 @@ class LightCurves(object):
 
     def draw(self, axe, obj_it, focus=None, titre=""):
         self.current_axes = axe
-        self.current_axes.scatter(self.times[obj_it], self.mag[obj_it],
-                                  zorder=2)
+        self.current_axes.scatter(self.times[obj_it], self.mag[obj_it])
         if len(titre) < 2:
             title = 'Obj num: {0} - id: {1}'.format(obj_it,
                                                     self.id_names[obj_it][0])
@@ -132,7 +131,7 @@ class LightCurves(object):
         print("Update?")
         # self.current_axes
         # self.current_axes.clear()
-        self.current_axes.scatter(times, mag, color='r', zorder=1)
+        self.current_axes.scatter(times, mag, color='r')
 
     def num_objects(self):
         return len(self.ra)
