@@ -205,7 +205,7 @@ class OutputFile:
 class MatplotlibWidget(FigureCanvas):
     sig_focus_img = Signal(int)
     sig_leave_img = Signal(bool)
-    sig_clicked_img = Signal(int)
+    sig_clicked_img = Signal(object)
 
     def __init__(self, width, height, _id=-1, parent=None):
         self.fig = Figure()  # figsize=(width, height)
@@ -235,8 +235,11 @@ class MatplotlibWidget(FigureCanvas):
         # print("Click!")
         # self.sig_clicked_img.emit()
         self.persist = True
-        self.sig_clicked_img.emit(self.id)
+        self.sig_clicked_img.emit(self)
         FigureCanvas.mousePressEvent(self, event)
+
+    def reset(self):
+        self.persist = False
 
 
 class MainWindow(QWidget):
@@ -251,7 +254,7 @@ class MainWindow(QWidget):
         self.cal_path = cal_path
         self.diff_path = diff_path
         self.time_interval = time_interval
-        self.cur_img = -1
+        self.cur_img = None
         if hasattr(self, 'bigLayout'):
             self.clearLayout(self.bigLayout)
         self.setUpWindows()
@@ -412,11 +415,15 @@ class MainWindow(QWidget):
         # mag = self.light_curves.object_mag(self.it_object).data
         # print(mag.data.shape)
         off = time_list[idx]
-        self.light_curves.focus_obj(self.it_object, off, self.cur_img != -1)
+        self.light_curves.focus_obj(self.it_object, off,
+                                    self.cur_img is not None)
         self.light_curves_plot.draw()
 
-    @Slot(int)
+    @Slot(object)
     def img_clicked(self, idx):
+        if self.cur_img is not None:
+            self.cur_img.reset()
+            self.cur_img = None
         self.cur_img = idx
 
     @Slot(bool)
@@ -424,7 +431,8 @@ class MainWindow(QWidget):
         if not persist:
             self.light_curves.reset(self.it_object)
             self.light_curves_plot.draw()
-            self.cur_img = -1
+            if self.cur_img is not None:
+                self.img_focus(self.cur_img.id)
 
 
 if __name__ == '__main__':
