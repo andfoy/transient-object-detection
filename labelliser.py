@@ -128,6 +128,7 @@ class LightCurves(object):
         times = times[obj_num - 8:obj_num]
         mag = self.mag[obj_it].data
         mag = mag[obj_num - 8:obj_num]
+        print("Update?")
         self.current_axes.scatter(times, mag, color='r')
 
     def num_objects(self):
