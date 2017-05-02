@@ -428,11 +428,10 @@ class MainWindow(QWidget):
 
     @Slot(bool)
     def reset_graph(self, persist):
-        if not persist:
-            self.light_curves.reset(self.it_object)
+        self.light_curves.reset(self.it_object)
+        if self.cur_img is not None:
+            self.img_focus(self.cur_img.id)
             self.light_curves_plot.draw()
-            if self.cur_img is not None:
-                self.img_focus(self.cur_img.id)
 
 
 if __name__ == '__main__':
