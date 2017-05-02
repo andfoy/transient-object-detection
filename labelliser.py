@@ -114,7 +114,6 @@ class LightCurves(object):
 
     def draw(self, axe, obj_it, focus=None, titre=""):
         self.current_axes = axe
-        self.current_axes.hold(True)
         self.current_axes.scatter(self.times[obj_it], self.mag[obj_it],
                                   zorder=2)
         if len(titre) < 2:
@@ -203,6 +202,7 @@ class MatplotlibWidget(FigureCanvas):
 
     def __init__(self, width, height, _id=-1, parent=None):
         self.fig = Figure()  # figsize=(width, height)
+        self.fig.hold(True)
         self.id = _id
         self.axes = self.fig.add_subplot(111)
 
