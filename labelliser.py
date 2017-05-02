@@ -382,8 +382,9 @@ class MainWindow(QWidget):
         # print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
         mag = self.light_curves.object_mag(self.it_object).data
-        # print(mag.data.shape)
+        print(mag.data.shape)
         off = time_list[idx]
+        print(off)
 
 
 if __name__ == '__main__':
