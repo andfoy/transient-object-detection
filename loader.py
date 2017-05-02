@@ -31,7 +31,7 @@ def astropy_loader(path):
     if img is None:
         err = "The file {0} does not contain any hdu image"
         raise RuntimeError(err.format(path))
-    print(np.max(img))
+    print(img.shape)
     return img
 
 
