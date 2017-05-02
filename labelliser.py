@@ -410,6 +410,7 @@ class MainWindow(QWidget):
     @Slot()
     def reset_graph(self):
         self.light_curves.reset(self.it_object)
+        self.light_curves_plot.draw()
 
 
 if __name__ == '__main__':
