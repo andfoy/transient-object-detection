@@ -15,6 +15,7 @@ def make_dataset(dir):
         for filename in files:
             print(filename)
             name, ext = osp.splitext(filename)
+            print(ext)
             if ext in IMG_EXTENSIONS:
                 filename = osp.join(path, filename)
                 images.append(filename)
