@@ -114,6 +114,7 @@ class LightCurves(object):
 
     def draw(self, axe, obj_it, focus=None, titre=""):
         self.current_axes = axe
+        self.current_axes.hold(True)
         self.current_axes.scatter(self.times[obj_it], self.mag[obj_it],
                                   zorder=2)
         if len(titre) < 2:
