@@ -376,7 +376,7 @@ class MainWindow(QWidget):
         # print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
         mag = self.light_curves.object_mag(self.it_object)
-        print(type(mag))
+        print(type(mag.data))
         print(time_list[idx])
 
 
