@@ -53,6 +53,7 @@ class TransientObjectLoader(data.Dataset):
     def __getitem__(self, index):
         path = self.imgs[index]
         img = self.loader(path)
+        print(img.shape)
         if self.transform is not None:
             img = self.transform(img)
         return img
