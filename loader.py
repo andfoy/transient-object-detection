@@ -1,5 +1,6 @@
 
 import os
+import numpy as np
 import os.path as osp
 from astropy.io import fits
 import torch.utils.data as data
@@ -30,6 +31,7 @@ def astropy_loader(path):
     if img is None:
         err = "The file {0} does not contain any hdu image"
         raise RuntimeError(err.format(path))
+    print(np.max(img))
     return img
 
 
