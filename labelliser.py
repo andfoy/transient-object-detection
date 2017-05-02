@@ -205,7 +205,15 @@ class MatplotlibWidget(FigureCanvas):
         self.setGeometry(QRect(0, 0, width, height))
         self.setMinimumSize(QSize(width, height))
         self.setMaximumSize(QSize(width, height))
+        self.setAttribute(Qt.WA_Hover)
 
+    def enterEvent(event):
+        print("I'm in!")
+        FigureCanvas.enterEvent(self, event)
+
+    def leaveEvent(event):
+        print("I'm out!")
+        FigureCanvas.leaveEvent(self, event)
 
 class MainWindow(QWidget):
     IMAGE_SIZE = 180
