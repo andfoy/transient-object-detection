@@ -12,7 +12,6 @@ from __future__ import print_function
 from astropy.io import fits
 # matplotlib.use("Qt4Agg")
 
-import random
 import pickle
 from math import pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -60,19 +59,6 @@ class ImgFit(object):
             axe.set_title(self.path[len(self.path) - 10:])
         else:
             axe.set_title(title)
-
-
-class CL(object):
-    def __init__(self, path):
-        self.path = path
-        self.x = []
-        self.y = []
-        for i in range(0, 10):
-            self.x.append(i)
-            self.y.append(random.random())
-
-    def draw(self, axe):
-        axe.scatter(self.x, self.y)
 
 
 class LightCurves(object):
@@ -139,6 +125,9 @@ class LightCurves(object):
 
     def object_info(self, num_object):
         return self.id_names[num_object][0], self.id_times[num_object]
+
+    def object_mag(self, obj_it):
+        return self.mag[obj_it]
 
 
 class OutputFile:
@@ -384,8 +373,10 @@ class MainWindow(QWidget):
 
     @Slot(int)
     def img_clicked(self, idx):
-        print("Info")
+        # print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
+        mag = self.light_curves.object_mag(self.it_object)
+        print(type(mag))
         print(time_list[idx])
 
 
