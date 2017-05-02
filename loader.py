@@ -13,6 +13,7 @@ def make_dataset(dir):
     images = []
     for path, _, files in os.walk(dir):
         for filename in files:
+            print(filename)
             name, ext = osp.splitext(filename)
             if ext in IMG_EXTENSIONS:
                 filename = osp.join(path, filename)
@@ -38,8 +39,8 @@ class TransientObjectLoader(data.Dataset):
         imgs = make_dataset(root)
         if len(imgs) == 0:
             ext = ','.join(IMG_EXTENSIONS)
-            raise RuntimeError("The path {0} does not"
-                               "contain any images of"
+            raise RuntimeError("The path {0} does not "
+                               "contain any images of "
                                "extension {1}".format(root, ext))
         self.root = root
         # self.imgs = imgs
