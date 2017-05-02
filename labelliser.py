@@ -399,8 +399,8 @@ class MainWindow(QWidget):
         # mag = self.light_curves.object_mag(self.it_object).data
         # print(mag.data.shape)
         off = time_list[idx]
-        self.light_curves_plot.clear()
         self.light_curves.focus_obj(self.it_object, off)
+        self.light_curves_plot.draw()
 
 
 if __name__ == '__main__':
