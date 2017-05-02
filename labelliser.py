@@ -416,7 +416,7 @@ class MainWindow(QWidget):
         # print(mag.data.shape)
         off = time_list[idx]
         self.light_curves.focus_obj(self.it_object, off,
-                                    self.cur_img is not None)
+                                    False)
         self.light_curves_plot.draw()
 
     @Slot(object)
@@ -428,11 +428,10 @@ class MainWindow(QWidget):
 
     @Slot(bool)
     def reset_graph(self, persist):
-        if not persist:
-            self.light_curves.reset(self.it_object)
-        if self.cur_img is not None:
-            self.img_focus(self.cur_img.id)
-            self.light_curves_plot.draw()
+        self.light_curves.reset(self.it_object)
+        # if self.cur_img is not None:
+        #     self.img_focus(self.cur_img.id)
+        #     self.light_curves_plot.draw()
 
 
 if __name__ == '__main__':
