@@ -384,7 +384,7 @@ class MainWindow(QWidget):
 
     @Slot(int)
     def img_clicked(self, idx):
-        # print(idx)
+        print("Info")
         object_id, time_list = self.light_curves.object_info(self.it_object)
         print(time_list[idx])
 
