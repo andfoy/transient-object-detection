@@ -383,6 +383,7 @@ class MainWindow(QWidget):
                 self.layoutGauche.addLayout(layout_tmp)
 
         widget_CL_tmp = MatplotlibWidget(400, 400, None)
+        self.light_curves_plot = widget_CL_tmp
         axe = widget_CL_tmp.axes
         self.light_curves.draw(axe, self.it_object)
         self.layoutDroit.addWidget(widget_CL_tmp)
@@ -398,6 +399,7 @@ class MainWindow(QWidget):
         # mag = self.light_curves.object_mag(self.it_object).data
         # print(mag.data.shape)
         off = time_list[idx]
+        self.light_curves_plot.clear()
         self.light_curves.focus_obj(self.it_object, off)
 
 
