@@ -35,7 +35,10 @@ parser.add_argument('--path',
                          "transient images")
 parser.add_argument('--curves',
                     default='light_curves_25_ids.pickle',
-                    help="Path to the file that contains the light curves")
+                    help="Pickle file that contains the light curves")
+parser.add_argument('--labels',
+                    default='labels.csv',
+                    help="CSV file that contains all the object labels")
 
 
 class ImgFit(object):
@@ -421,9 +424,9 @@ class MainWindow(QWidget):
 
     @Slot(object)
     def img_clicked(self, idx):
-        if self.cur_img is not None:
-            self.cur_img.reset()
-            self.cur_img = None
+        # if self.cur_img is not None:
+        #     self.cur_img.reset()
+        #     self.cur_img = None
         self.cur_img = idx
 
     @Slot(bool)
@@ -449,6 +452,18 @@ if __name__ == '__main__':
     print("L : ", " Force label 1 ")
     print("M : ", " Force label 2 ")
 
+    labels_file = args.labels
+    with open(labels_file, 'r') as fp:
+        lines = fp.readlines()
+
+    header = lines[0]
+    lines = lines[1:]
+    labels = {}
+    for line in lines:
+        obj, _type = line.rstrip().split(',')
+        labels[int(obj)] = _type
+
+    print(labels)
     # light_curves =
     light_curves = LightCurves(args.curves)
     img_path = args.path
