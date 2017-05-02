@@ -249,7 +249,7 @@ class MainWindow(QWidget):
     IMAGE_SIZE = 180
 
     def __init__(self, light_curves, it_object, doc_label,
-                 cal_path, diff_path, time_interval):
+                 cal_path, diff_path, time_interval, labels):
         super(MainWindow, self).__init__(None)
         self.doc_label = doc_label
         self.light_curves = light_curves
@@ -258,6 +258,7 @@ class MainWindow(QWidget):
         self.diff_path = diff_path
         self.time_interval = time_interval
         self.cur_img = None
+        self.labels = labels
         if hasattr(self, 'bigLayout'):
             self.clearLayout(self.bigLayout)
         self.setUpWindows()
@@ -353,6 +354,8 @@ class MainWindow(QWidget):
         self.add_button = QPushButton("A, Q, S :::: Label=" + str(current_label))
 
         self.bigLayout.addWidget(self.add_button)
+        obj_type = "Object type: {0}".format(self.labels[object_id])
+        self.bigLayout.addWidget(QLabel(obj_type), self)
         self.bigLayout.addWidget(self.scrollArea)
 
         self.layoutVertical = QHBoxLayout(self.scrollAreaWidgetContents)
