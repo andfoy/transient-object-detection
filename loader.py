@@ -1,5 +1,6 @@
 
 import os
+import torch
 import numpy as np
 import os.path as osp
 from astropy.io import fits
@@ -59,10 +60,11 @@ class TransientObjectLoader(data.Dataset):
         path = self.imgs[index]
         img = self.loader(path)
         # print(img.shape)
-        if self.transform is not None:
-            img = self.transform(img)
-            plt.imshow(img.numpy())
-            plt.show()
+        # if self.transform is not None:
+        # img = self.transform(img)
+        img = torch.FloatTensor(img)
+        plt.imshow(img.numpy())
+        plt.show()
         return img
 
     def __len__(self):
