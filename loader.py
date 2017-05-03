@@ -59,10 +59,10 @@ class TransientObjectLoader(data.Dataset):
         path = self.imgs[index]
         img = self.loader(path)
         # print(img.shape)
-        plt.imshow(img)
-        plt.show()
         if self.transform is not None:
             img = self.transform(img)
+            plt.imshow(img.numpy())
+            plt.show()
         return img
 
     def __len__(self):
