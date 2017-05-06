@@ -30,12 +30,13 @@ def astropy_loader(path):
     for hdu in hdulist:
         if EXTTYPE in hdu.header:
             if hdu.header[EXTTYPE] == IMAGE:
+                hdu.scale('uint8', 'minmax')
                 img = hdu.data
     if img is None:
         err = "The file {0} does not contain any hdu image"
         raise RuntimeError(err.format(path))
     # print(img.shape)
-    return img
+    return torch.ByteTensor(img)
 
 
 class TransientObjectLoader(data.Dataset):
@@ -60,11 +61,11 @@ class TransientObjectLoader(data.Dataset):
         path = self.imgs[index]
         img = self.loader(path)
         # print(img.shape)
-        # if self.transform is not None:
-        # img = self.transform(img)
-        img = torch.FloatTensor(img)
-        plt.imshow(img.numpy())
-        plt.show()
+        if self.transform is not None:
+            img = self.transform(img)
+        # img = torch.FloatTensor(img)
+        # plt.imshow(img.numpy())
+        # plt.show()
         return img
 
     def __len__(self):
