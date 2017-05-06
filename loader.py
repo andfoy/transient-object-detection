@@ -3,6 +3,7 @@ import os
 import torch
 import numpy as np
 import os.path as osp
+from PIL import Image
 from astropy.io import fits
 import torch.utils.data as data
 import matplotlib.pyplot as plt
@@ -61,6 +62,9 @@ class TransientObjectLoader(data.Dataset):
         path = self.imgs[index]
         img = self.loader(path)
         # print(img.shape)
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(img.numpy(), mode='L')
         if self.transform is not None:
             img = self.transform(img)
         # img = torch.FloatTensor(img)
