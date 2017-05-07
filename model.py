@@ -17,6 +17,8 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='enables CUDA training')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
+parser.add_argument('--lr', type=float, default=1e-3, metavar='S',
+                    help='Learning rate')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--data', type=str,
@@ -99,7 +101,7 @@ def loss_function(recon_x, x, mu, logvar):
     return BCE + KLD
 
 
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
+optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 
 def train(epoch):
