@@ -129,7 +129,7 @@ def train(epoch):
 def test(epoch):
     model.eval()
     test_loss = 0
-    for data, _ in test_loader:
+    for data in test_loader:
         if args.cuda:
             data = data.cuda()
         data = Variable(data, volatile=True)
