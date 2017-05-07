@@ -26,13 +26,16 @@ def make_dataset(dir):
 
 
 def astropy_loader(path):
-    print(path)
     hdulist = fits.open(path)
     img = None
     for hdu in hdulist:
         if EXTTYPE in hdu.header:
             if hdu.header[EXTTYPE] == IMAGE:
-                hdu.scale('uint8', 'minmax')
+                try:
+                    hdu.scale('uint8', 'minmax')
+                except ValueError as e:
+                    print(path)
+                    raise e
                 img = hdu.data
     if img is None:
         err = "The file {0} does not contain any hdu image"
