@@ -81,7 +81,7 @@ class TransientObjectLoader(data.Dataset):
     def process_dataset(self, img_path):
         print("Processing dataset...")
         try:
-            os.makedirs(self.root)
+            os.makedirs(self.data_folder)
         except OSError as e:
             if e.errno == errno.EEXIST:
                 pass
