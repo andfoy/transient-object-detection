@@ -101,14 +101,16 @@ class TransientObjectLoader(data.Dataset):
         print(images.shape)
 
         test_idx = np.random.permutation(images.shape[-1])[0:1000]
-        test = torch.ByteTensor(images[:, :, test_idx])
-        train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
+        test = images[:, :, test_idx]
+        train = np.delete(images, test_idx, axis=-1)
 
         train_path = osp.join(self.data_folder, self.training_file)
         test_path = osp.join(self.data_folder, self.test_file)
 
-        train = train.view(-1, 32, 32)
-        test = test.view(-1, 32, 32)
+        train = torch.ByteTensor(np.reshape(train, (-1, 0, 1)))
+        test = torch.ByteTensor(np.reshape(test, (-1, 0, 1)))
+        # train = train.view(-1, 32, 32)
+        # test = test.view(-1, 32, 32)
 
         with open(train_path, 'wb') as fp:
             torch.save(train, fp)
