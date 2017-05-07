@@ -6,7 +6,7 @@ import os.path as osp
 from PIL import Image
 from astropy.io import fits
 import torch.utils.data as data
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 IMG_EXTENSIONS = ['.fits']
@@ -43,10 +43,14 @@ def astropy_loader(path):
         err = "The file {0} does not contain any hdu image"
         raise RuntimeError(err.format(path))
     # print(img.shape)
-    return torch.ByteTensor(img)
+    return img
 
 
 class TransientObjectLoader(data.Dataset):
+    data_folder = 'data'
+    training_file = 'training.pt'
+    test_file = 'test.pt'
+
     def __init__(self, root, transform=None, train=True,
                  loader=astropy_loader):
         imgs = make_dataset(root)
@@ -56,21 +60,60 @@ class TransientObjectLoader(data.Dataset):
                                "contain any images of "
                                "extension {1}".format(root, ext))
         self.root = root
-        # self.imgs = imgs
-        if train:
-            self.imgs = imgs[:60000]
-        else:
-            self.imgs = imgs[60000:]
-        self.transform = transform
         self.loader = loader
+        self.transform = transform
+
+        if not self._check_exists():
+            self.process_dataset(imgs)
+
+        train_path = osp.join(self.data_folder, self.training_file)
+        test_path = osp.join(self.data_folder, self.test_file)
+
+        if train:
+            with open(train_path, 'rb') as f:
+                self.imgs = torch.load(f)
+        else:
+            with open(test_path, 'rb') as f:
+                self.imgs = torch.load(f)
+
+    def process_dataset(self, img_path):
+        images = []
+        for path in img_path:
+            try:
+                img = self.loader(path)
+            except Exception:
+                continue
+            images.append(img)
+        images = np.dstack(images)
+        test_idx = np.random.permutation(images.shape[-1])[0:1000]
+        test = torch.ByteTensor(images[:, :, test_idx])
+        train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
+
+        train_path = osp.join(self.data_folder, self.training_file)
+        test_path = osp.join(self.data_folder, self.test_file)
+
+        train = train.view(-1, 32, 32)
+        test = test.view(-1, 32, 32)
+
+        with open(train_path, 'wb') as fp:
+            torch.save(train, fp)
+
+        with open(test_path, 'wb') as fp:
+            torch.save(test, fp)
+
+    def _check_exists(self):
+        train_path = osp.join(self.data_folder, self.training_file)
+        test_path = osp.join(self.data_folder, self.test_file)
+        return osp.exists(train_path) and osp.exists(test_path)
 
     def __getitem__(self, index):
-        path = self.imgs[index]
-        img = self.loader(path)
-        # print(img.shape)
+        img = self.imgs[index, :, :]
+        # img = self.loader(path)
+
         # doing this so that it is consistent with all other datasets
         # to return a PIL Image
         img = Image.fromarray(img.numpy(), mode='L')
+
         if self.transform is not None:
             img = self.transform(img)
         # img = torch.FloatTensor(img)
@@ -79,4 +122,4 @@ class TransientObjectLoader(data.Dataset):
         return img
 
     def __len__(self):
-        return len(self.imgs)
+        return self.imgs.size(0)
