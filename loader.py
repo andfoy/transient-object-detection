@@ -31,6 +31,8 @@ def astropy_loader(path):
     for hdu in hdulist:
         if EXTTYPE in hdu.header:
             if hdu.header[EXTTYPE] == IMAGE:
+                hdu.data[np.isnan(hdu.data)] = 0
+                hdu.data[np.isinf(hdu.data)] = 0
                 try:
                     hdu.scale('uint8', 'minmax')
                 except ValueError as e:
