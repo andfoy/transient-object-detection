@@ -1,6 +1,7 @@
 
 import os
 import torch
+import errno
 import numpy as np
 import os.path as osp
 from PIL import Image
@@ -77,6 +78,15 @@ class TransientObjectLoader(data.Dataset):
                 self.imgs = torch.load(f)
 
     def process_dataset(self, img_path):
+        print("Processing dataset...")
+        try:
+            os.makedirs(self.root)
+        except OSError as e:
+            if e.errno == errno.EEXIST:
+                pass
+            else:
+                raise
+
         images = []
         for path in img_path:
             try:
@@ -100,6 +110,8 @@ class TransientObjectLoader(data.Dataset):
 
         with open(test_path, 'wb') as fp:
             torch.save(test, fp)
+
+        print("Done!")
 
     def _check_exists(self):
         train_path = osp.join(self.data_folder, self.training_file)
