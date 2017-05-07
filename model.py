@@ -48,10 +48,11 @@ class VAE(nn.Module):
     def __init__(self):
         super(VAE, self).__init__()
 
+        # self.conv1 = nn.Conv2d(1, 64, kernel_size=3)
         self.fc1 = nn.Linear(1024, 400)
-        self.fc21 = nn.Linear(400, 20)
-        self.fc22 = nn.Linear(400, 20)
-        self.fc3 = nn.Linear(20, 400)
+        self.fc21 = nn.Linear(400, 100)
+        self.fc22 = nn.Linear(400, 100)
+        self.fc3 = nn.Linear(100, 400)
         self.fc4 = nn.Linear(400, 1024)
 
         self.relu = nn.ReLU()
