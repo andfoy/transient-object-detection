@@ -2,6 +2,7 @@
 import os
 import torch
 import errno
+import progressbar
 import numpy as np
 import os.path as osp
 from PIL import Image
@@ -88,7 +89,8 @@ class TransientObjectLoader(data.Dataset):
                 raise
 
         images = []
-        for path in img_path:
+        bar = progressbar.ProgressBar()
+        for path in bar(img_path):
             try:
                 img = self.loader(path)
             except Exception:
