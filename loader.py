@@ -26,6 +26,7 @@ def make_dataset(dir):
 
 
 def astropy_loader(path):
+    print(path)
     hdulist = fits.open(path)
     img = None
     for hdu in hdulist:
