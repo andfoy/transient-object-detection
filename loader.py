@@ -99,17 +99,10 @@ class TransientObjectLoader(data.Dataset):
             images.append(img)
 
         images = np.dstack(images)
-        print(images.shape)
 
-        plt.imshow(images[:, :, 0])
-        plt.show()
         test_idx = np.random.permutation(images.shape[-1])[0:self.test_split]
         test = torch.ByteTensor(images[:, :, test_idx])
-        plt.imshow(test[:, :, 0].numpy())
-        plt.show()
         train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
-        plt.imshow(train[:, :, 0].numpy())
-        plt.show()
 
         train_path = osp.join(self.data_folder, self.training_file)
         test_path = osp.join(self.data_folder, self.test_file)
@@ -131,7 +124,7 @@ class TransientObjectLoader(data.Dataset):
         return osp.exists(train_path) and osp.exists(test_path)
 
     def __getitem__(self, index):
-        img = self.imgs[index, :, :]
+        img = self.imgs[:, :, index]
         # img = self.loader(path)
 
         # doing this so that it is consistent with all other datasets
