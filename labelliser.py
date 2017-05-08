@@ -127,6 +127,7 @@ class LightCurves(object):
 
     def focus_obj(self, obj_it, obj_num, persist):
         # self.current_axes.hold()
+        print(self.times[obj_it])
         times = self.times[obj_it].data
         times = times[obj_num - 8:obj_num]
         mag = self.mag[obj_it].data
