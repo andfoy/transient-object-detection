@@ -8,7 +8,7 @@ import os.path as osp
 from PIL import Image
 from astropy.io import fits
 import torch.utils.data as data
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 IMG_EXTENSIONS = ['.fits']
@@ -100,6 +100,8 @@ class TransientObjectLoader(data.Dataset):
         images = np.dstack(images)
         print(images.shape)
 
+        plt.imshow(images[:, :, 0])
+        plt.show()
         test_idx = np.random.permutation(images.shape[-1])[0:10000]
         test = torch.ByteTensor(images[:, :, test_idx])
         train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
