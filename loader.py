@@ -124,7 +124,6 @@ class TransientObjectLoader(data.Dataset):
         return osp.exists(train_path) and osp.exists(test_path)
 
     def __getitem__(self, index):
-        print(self.imgs.size(-1))
         img = self.imgs[:, :, index]
         # img = self.loader(path)
 
