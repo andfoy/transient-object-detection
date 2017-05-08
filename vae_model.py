@@ -1,12 +1,15 @@
+
 from __future__ import print_function
+
 import argparse
 import torch
 import torch.utils.data
 import torch.nn as nn
 import torch.optim as optim
+from torchvision import transforms
 from torch.autograd import Variable
 from loader import TransientObjectLoader
-from torchvision import datasets, transforms
+
 
 parser = argparse.ArgumentParser(description='Transient object VAE reduction')
 parser.add_argument('--batch-size', type=int, default=128, metavar='N',
@@ -20,7 +23,8 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
 parser.add_argument('--lr', type=float, default=1e-3, metavar='S',
                     help='Learning rate')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-                    help='how many batches to wait before logging training status')
+                    help='how many batches to wait before '
+                         'logging training status')
 parser.add_argument('--data', type=str,
                     help='Path to the folder that contains the images')
 
@@ -36,11 +40,17 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 train_loader = torch.utils.data.DataLoader(
     TransientObjectLoader(args.data, train=True,
-                          transform=transforms.ToTensor()),
+                          transform=transforms.Compose([
+                              transforms.ToTensor(),
+                              transforms.Normalize((0.485,), (0.229,))
+                          ])),
     batch_size=args.batch_size, shuffle=True, **kwargs)
 test_loader = torch.utils.data.DataLoader(
     TransientObjectLoader(args.data, train=False,
-                          transform=transforms.ToTensor()),
+                          transform=transforms.Compose([
+                              transforms.ToTensor(),
+                              transforms.Normalize((0.485,), (0.229,))
+                          ])),
     batch_size=args.batch_size, shuffle=True, **kwargs)
 
 
