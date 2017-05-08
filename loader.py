@@ -100,7 +100,7 @@ class TransientObjectLoader(data.Dataset):
         images = np.dstack(images)
         print(images.shape)
 
-        test_idx = np.random.permutation(images.shape[-1])[0:1000]
+        test_idx = np.random.permutation(images.shape[-1])[0:10000]
         test = torch.ByteTensor(images[:, :, test_idx])
         train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
 
