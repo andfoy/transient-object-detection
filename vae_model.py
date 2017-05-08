@@ -149,7 +149,7 @@ def train(epoch):
                 100. * batch_idx / len(train_loader),
                 loss.data[0] / len(data)))
 
-    print('====> Epoch: {} Average loss: {:.4f}'.format(
+    print('\n====> Epoch: {} Average loss: {:.4f}'.format(
           epoch, train_loss / len(train_loader.dataset)))
 
 
@@ -164,7 +164,7 @@ def test(epoch):
         test_loss += loss_function(recon_batch, data, mu, logvar).data[0]
 
     test_loss /= len(test_loader.dataset)
-    print('====> Test set loss: {:.4f}'.format(test_loss))
+    print('====> Test set loss: {:.4f}\n'.format(test_loss))
     return test_loss
 
 
