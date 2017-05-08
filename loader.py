@@ -53,7 +53,7 @@ class TransientObjectLoader(data.Dataset):
     training_file = 'training.pt'
     test_file = 'test.pt'
 
-    def __init__(self, root, transform=None, train=True,
+    def __init__(self, root, test_split=10000, transform=None, train=True,
                  loader=astropy_loader):
         imgs = make_dataset(root)
         if len(imgs) == 0:
@@ -64,6 +64,7 @@ class TransientObjectLoader(data.Dataset):
         self.root = root
         self.loader = loader
         self.transform = transform
+        self.test_split = test_split
 
         if not self._check_exists():
             self.process_dataset(imgs)
@@ -102,15 +103,19 @@ class TransientObjectLoader(data.Dataset):
 
         plt.imshow(images[:, :, 0])
         plt.show()
-        test_idx = np.random.permutation(images.shape[-1])[0:10000]
+        test_idx = np.random.permutation(images.shape[-1])[0:self.test_split]
         test = torch.ByteTensor(images[:, :, test_idx])
+        plt.imshow(test[:, :, 0].numpy())
+        plt.show()
         train = torch.ByteTensor(np.delete(images, test_idx, axis=-1))
+        plt.imshow(train[:, :, 0].numpy())
+        plt.show()
 
         train_path = osp.join(self.data_folder, self.training_file)
         test_path = osp.join(self.data_folder, self.test_file)
 
-        train = train.contiguous().view(-1, 32, 32)
-        test = test.contiguous().view(-1, 32, 32)
+        # train = train.contiguous().view(-1, 32, 32)
+        # test = test.contiguous().view(-1, 32, 32)
 
         with open(train_path, 'wb') as fp:
             torch.save(train, fp)
