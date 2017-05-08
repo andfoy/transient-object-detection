@@ -1,10 +1,11 @@
 
 from __future__ import print_function
 
-import argparse
 import torch
-import torch.utils.data
+import argparse
 import torch.nn as nn
+import os.path as osp
+import torch.utils.data
 import torch.optim as optim
 from torchvision import transforms
 from torch.autograd import Variable
@@ -27,6 +28,8 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                          'logging training status')
 parser.add_argument('--data', type=str,
                     help='Path to the folder that contains the images')
+parser.add_argument('--save', type=str, default='model_vae.pt',
+                    help='path to save the final model')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -86,6 +89,23 @@ class VAE(nn.Module):
 
 
 model = VAE()
+load_ext = False
+if osp.exists(args.save):
+    with open(args.save, 'rb') as f:
+        state_dict = torch.load(f)
+        discard = [x for x in state_dict if x.startswith('fc1')]
+        state = model.state_dict()
+        state.update(state_dict)
+        try:
+            model.load_state_dict(state)
+        except Exception:
+            for key in discard:
+                state_dict.pop(key)
+            state = model.state_dict()
+            state.update(state_dict)
+            model.load_state_dict(state)
+        load_ext = True
+
 if args.cuda:
     model.cuda()
 
@@ -145,8 +165,33 @@ def test(epoch):
 
     test_loss /= len(test_loader.dataset)
     print('====> Test set loss: {:.4f}'.format(test_loss))
+    return test_loss
 
 
-for epoch in range(1, args.epochs + 1):
-    train(epoch)
+if __name__ == '__main__':
+    if not load_ext:
+        best_test_loss = None
+    else:
+        best_test_loss = test(0)
+
+    try:
+        for epoch in range(1, args.epochs + 1):
+            train(epoch)
+            test_loss = test(epoch)
+
+            if not best_test_loss or test_loss < best_test_loss:
+                with open(args.save, 'wb') as f:
+                    torch.save(model.state_dict(), f)
+                best_test_loss = test_loss
+
+    except KeyboardInterrupt:
+        print('-' * 89)
+        print('Exiting from training early')
+
+    # Load the best saved model.
+    with open(args.save, 'rb') as f:
+        # model = Net()
+        state_dict = torch.load(f)
+        model.load_state_dict(state_dict)
+
     test(epoch)
