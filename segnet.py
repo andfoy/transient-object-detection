@@ -18,7 +18,7 @@ cfg = {
 
 
 class SegNet(nn.Module):
-    def __init__(self, features, deconv, input_nbr, label_nbr):
+    def __init__(self, features, deconv, label_nbr):
         super(SegNet, self).__init__()
 
         # batchNorm_momentum = 0.1
@@ -161,3 +161,9 @@ def make_layers(cfg, batch_norm=False):
                 layers += [conv2d, nn.ReLU(inplace=True)]
             in_channels = v
     return layers
+
+
+def make_segnet(out_dim=1024):
+    base = make_layers(cfg['D'], batch_norm=True)
+    deconv = make_layers(cfg['F'], batch_norm=True)
+    return SegNet(base, deconv, out_dim)
