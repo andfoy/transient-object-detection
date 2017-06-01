@@ -40,19 +40,19 @@ class SegNet(nn.Module):
             if isinstance(layer, nn.MaxPool2d):
                 x, _id = layer(x)
                 ids.append(_id)
-                print(_id.size())
+                # print(_id.size())
             else:
                 x = layer(x)
 
         idx = 0
         ids = ids[::-1]
 
-        print("\n")
+        # print("\n")
         for layer in self.deconv:
-            print(layer)
+            # print(layer)
             if isinstance(layer, nn.MaxUnpool2d):
                 x = layer(x, ids[idx])
-                print(ids[idx].size())
+                # print(ids[idx].size())
                 idx += 1
             else:
                 x = layer(x)
