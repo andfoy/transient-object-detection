@@ -81,6 +81,9 @@ else:
 
     model.load_state_dict(state_dict)
 
+if args.cuda:
+    model.cuda()
+
 optimizer = optim.SGD(model.parameters(), lr=args.lr)
 criterion = nn.BCELoss()
 criterion.size_average = False
