@@ -431,7 +431,7 @@ class MainWindow(QWidget):
             self.passeImage()
 
     @Slot(int, bool)
-    def label_img(idx, label):
+    def label_img(self, idx, label):
         print(idx, label)
 
     @Slot(int)
