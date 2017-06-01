@@ -409,7 +409,8 @@ class MainWindow(QWidget):
                 is_transient_btn = QPushButton('Yes', self)
                 not_transient_btn = QPushButton('No', self)
 
-                img_id = int(i)
+                # img_id = int(i)
+                print(nom)
                 is_transient_btn.clicked.connect(lambda: self.label_img(nom, True))
                 not_transient_btn.clicked.connect(lambda: self.label_img(nom, False))
 
