@@ -352,7 +352,8 @@ class MainWindow(QWidget):
         self.scrollAreaWidgetContents.setGeometry(rect)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.add_button = QPushButton("A, Q, S :::: Label=" + str(current_label))
+        self.add_button = QPushButton("A, Q, S :::: Label=" +
+                                      str(current_label))
 
         self.bigLayout.addWidget(self.add_button)
         obj_type = "Object type: {0}".format(self.labels[object_id])
@@ -403,7 +404,21 @@ class MainWindow(QWidget):
 
                 layout_tmp.addWidget(widget_cal_tmp)
                 layout_tmp.addWidget(widget_dif_tmp)
-                self.layoutGauche.addLayout(layout_tmp)
+
+                btn_layout = QHBoxLayout(self)
+                is_transient_btn = QPushButton('Yes', self)
+                not_transient_btn = QPushButton('No', self)
+
+                is_transient_btn.clicked.connect(lambda: self.label_img(i, True))
+                not_transient_btn.clicked.connect(lambda: self.label_img(i, False))
+
+                btn_layout.addWidget(is_transient_btn)
+                btn_layout.addWidget(not_transient_btn)
+
+                general_layout = QVBoxLayout(self)
+                general_layout.addLayout(layout_tmp)
+                general_layout.addLayout(btn_layout)
+                self.layoutGauche.addLayout(general_layout)
 
         widget_CL_tmp = MatplotlibWidget(400, 400, None)
         self.light_curves_plot = widget_CL_tmp
@@ -414,6 +429,10 @@ class MainWindow(QWidget):
 
         if err == 1:
             self.passeImage()
+
+    @Slot(int, bool)
+    def label_img(idx, label):
+        print(idx, label)
 
     @Slot(int)
     def img_focus(self, idx):
