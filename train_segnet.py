@@ -100,7 +100,7 @@ def train(epoch):
         optimizer.zero_grad()
         recon = model(data)
         # loss = loss_function(recon_batch, data, mu, logvar)
-        print(recon.sum())
+        print(data.sum())
         loss = criterion(recon, data)
         loss.backward()
         train_loss += loss.data[0]
