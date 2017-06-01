@@ -136,7 +136,7 @@ class TransientObjectLoader(data.Dataset):
         # img = torch.FloatTensor(img)
         # plt.imshow(img.numpy())
         # plt.show()
-        return img
+        return torch.stack([img, img, img], 0)
 
     def __len__(self):
         return self.imgs.size(-1)
