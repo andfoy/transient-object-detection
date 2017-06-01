@@ -61,7 +61,7 @@ def make_layers(cfg, batch_norm=False):
             layers += [nn.MaxPool2d(kernel_size=2, stride=2,
                                     return_indices=True)]
         elif v == 'U':
-            layers += [nn.MaxUnpool2d(size=(2, 2), stride=(2, 2))]
+            layers += [nn.MaxUnpool2d(kernel_size=(2, 2), stride=(2, 2))]
         else:
             conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
             if batch_norm:
