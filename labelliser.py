@@ -263,6 +263,7 @@ class MainWindow(QWidget):
         self.diff_path = diff_path
         self.time_interval = time_interval
         self.cur_img = None
+        self.img_labels = {}
         self.labels = labels
         self.save_file = open(args.save, 'a+')
         self.save_file.write('obj_file,label\n')
@@ -313,6 +314,7 @@ class MainWindow(QWidget):
             self.passeImage()
 
     def passeImage(self):
+        self.write_labels()
         exists = False
         while not exists:
             self.it_object = self.it_object + 1
@@ -321,6 +323,11 @@ class MainWindow(QWidget):
             except Exception:
                 continue
             break
+
+    def write_labels(self):
+        for obj in self.img_labels:
+            self.save_file.write('{0},{1}\n'.format(obj,
+                                                    int(self.img_labels[obj])))
 
     def clearLayout(self, layout):
         while layout.count():
@@ -421,6 +428,7 @@ class MainWindow(QWidget):
                 def btn_closure(idx, state):
                     return lambda: self.label_img(idx, state)
 
+                self.img_labels[nom] = False
                 is_transient_btn.clicked.connect(btn_closure(nom, True))
                 not_transient_btn.clicked.connect(btn_closure(nom, False))
 
@@ -445,7 +453,8 @@ class MainWindow(QWidget):
     @Slot(str, bool)
     def label_img(self, idx, label):
         print(idx, label)
-        self.save_file.write('{0}, {1}'.format(idx, int(label)))
+        self.img_labels[idx] = label
+        # self.save_file.write('{0}, {1}\n'.format(idx, int(label)))
 
     @Slot(int)
     def img_focus(self, idx):
