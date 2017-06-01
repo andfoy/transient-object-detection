@@ -13,6 +13,7 @@ from astropy.io import fits
 # matplotlib.use("Qt4Agg")
 
 import pickle
+import copy
 from math import pi
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -411,8 +412,8 @@ class MainWindow(QWidget):
 
                 # img_id = int(i)
                 print(nom)
-                is_transient_btn.clicked.connect(lambda: self.label_img((nom, ), True))
-                not_transient_btn.clicked.connect(lambda: self.label_img((nom, ), False))
+                is_transient_btn.clicked.connect(lambda: self.label_img((copy.deepcopy(nom), ), True))
+                not_transient_btn.clicked.connect(lambda: self.label_img((copy.deepcopy(nom), ), False))
 
                 btn_layout.addWidget(is_transient_btn)
                 btn_layout.addWidget(not_transient_btn)
