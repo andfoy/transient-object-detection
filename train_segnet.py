@@ -29,6 +29,7 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before '
                          'logging training status')
 parser.add_argument('--data', type=str,
+                    default='../new_stamps',
                     help='Path to the folder that contains the images')
 parser.add_argument('--save', type=str, default='model_segnet.pt',
                     help='path to save the final model')
