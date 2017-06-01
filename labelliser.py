@@ -410,8 +410,8 @@ class MainWindow(QWidget):
                 not_transient_btn = QPushButton('No', self)
 
                 img_id = int(i)
-                is_transient_btn.clicked.connect(lambda: self.label_img(img_id, True))
-                not_transient_btn.clicked.connect(lambda: self.label_img(img_id, False))
+                is_transient_btn.clicked.connect(lambda: self.label_img(nom, True))
+                not_transient_btn.clicked.connect(lambda: self.label_img(nom, False))
 
                 btn_layout.addWidget(is_transient_btn)
                 btn_layout.addWidget(not_transient_btn)
@@ -431,7 +431,7 @@ class MainWindow(QWidget):
         if err == 1:
             self.passeImage()
 
-    @Slot(int, bool)
+    @Slot(str, bool)
     def label_img(self, idx, label):
         print(idx, label)
 
