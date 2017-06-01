@@ -71,7 +71,7 @@ class SegNet(nn.Module):
         ids = ids[::-1]
 
         for layer in self.deconv:
-            if isinstance(layer, nn.MaxUnPool2d):
+            if isinstance(layer, nn.MaxUnpool2d):
                 x = layer(x, ids[idx])
                 idx += 1
             else:
