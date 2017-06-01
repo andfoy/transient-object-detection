@@ -40,6 +40,9 @@ parser.add_argument('--curves',
 parser.add_argument('--labels',
                     default='labels.csv',
                     help="CSV file that contains all the object labels")
+parser.add_argument('--save',
+                    default='transient_detection.csv',
+                    help='filename to save all transient labels')
 
 
 class ImgFit(object):
@@ -261,6 +264,8 @@ class MainWindow(QWidget):
         self.time_interval = time_interval
         self.cur_img = None
         self.labels = labels
+        self.save_file = open(args.save, 'a+')
+        self.save_file.write('obj_file,label\n')
         if hasattr(self, 'bigLayout'):
             self.clearLayout(self.bigLayout)
         self.setUpWindows()
@@ -416,8 +421,8 @@ class MainWindow(QWidget):
                 def btn_closure(idx, state):
                     return lambda: self.label_img(idx, state)
 
-                is_transient_btn.clicked.connect(btn_closure(i, True))
-                not_transient_btn.clicked.connect(btn_closure(i, False))
+                is_transient_btn.clicked.connect(btn_closure(nom, True))
+                not_transient_btn.clicked.connect(btn_closure(nom, False))
 
                 btn_layout.addWidget(is_transient_btn)
                 btn_layout.addWidget(not_transient_btn)
@@ -437,9 +442,10 @@ class MainWindow(QWidget):
         if err == 1:
             self.passeImage()
 
-    @Slot(int, bool)
+    @Slot(str, bool)
     def label_img(self, idx, label):
         print(idx, label)
+        self.save_file.write('{0}, {1}'.format(idx, int(label)))
 
     @Slot(int)
     def img_focus(self, idx):
@@ -465,6 +471,9 @@ class MainWindow(QWidget):
         # if self.cur_img is not None:
         #     self.img_focus(self.cur_img.id)
         #     self.light_curves_plot.draw()
+
+    def close_file(self):
+        self.save_file.close()
 
 
 if __name__ == '__main__':
@@ -503,8 +512,11 @@ if __name__ == '__main__':
     # pathVersDiff = "/renoir_data_02/jpreyes/stamp_data/filter_r/diff-"
     time_interval = 7
 
-    main = MainWindow(light_curves, 0, doc_label, cal_path,
-                      diff_path, time_interval, labels)
-    main.resize(800, 700)
-    main.show()
-    app.exec_()
+    try:
+        main = MainWindow(light_curves, 0, doc_label, cal_path,
+                          diff_path, time_interval, labels)
+        main.resize(800, 700)
+        main.show()
+        app.exec_()
+    finally:
+        main.close_file()
