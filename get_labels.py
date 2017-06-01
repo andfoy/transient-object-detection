@@ -24,7 +24,7 @@ parser.add_argument('--prefix', default='diff-*.fits',
 URL = 'http://simbad.u-strasbg.fr/simbad/sim-coo'
 params = {
     'Coord': '215.0939663516772 52.335801868486165',
-    'Radius': 2,
+    'Radius': 0.03,
     'Radius.unit': 'arcmin'
 }
 
