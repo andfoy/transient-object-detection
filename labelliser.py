@@ -419,7 +419,7 @@ class MainWindow(QWidget):
                 general_layout = QVBoxLayout()
                 general_layout.addLayout(layout_tmp)
                 general_layout.addLayout(btn_layout)
-                self.layoutGauche.addLayout(layout_tmp)
+                self.layoutGauche.addLayout(general_layout)
 
         widget_CL_tmp = MatplotlibWidget(400, 400, None)
         self.light_curves_plot = widget_CL_tmp
