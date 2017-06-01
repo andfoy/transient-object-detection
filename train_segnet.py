@@ -74,7 +74,7 @@ else:
     vgg_layers = vgg_layers[1:][::-1]
     deconv_layers = [k for k in state_dict if k.startswith('deconv')]
     for layer, vgg in zip(deconv_layers, vgg_layers):
-        print(state_dict[layer], vgg_state[vgg])
+        print(state_dict[layer].size(), vgg_state[vgg].size())
         state_dict[layer] = vgg_state[vgg]
 
     model.load_state_dict(state_dict)
