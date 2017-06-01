@@ -71,9 +71,10 @@ else:
         # if layer.startswith('features'):
         state_dict[layer] = vgg_state[layer]
 
-    # vgg_layers = vgg_layers[1:][::-1]
-    # deconv_layers = [k for k in state_dict if k.startswith('deconv')]
-    # for layer, vgg in zip(deconv_layers, vgg_layers):
-        # state_dict[layer] = vgg_state[vgg]
+    vgg_layers = vgg_layers[1:][::-1]
+    deconv_layers = [k for k in state_dict if k.startswith('deconv')]
+    for layer, vgg in zip(deconv_layers, vgg_layers):
+        print(state_dict[layer], vgg_state[vgg])
+        state_dict[layer] = vgg_state[vgg]
 
     model.load_state_dict(state_dict)
