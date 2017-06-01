@@ -129,14 +129,16 @@ class TransientObjectLoader(data.Dataset):
 
         # doing this so that it is consistent with all other datasets
         # to return a PIL Image
-        img = Image.fromarray(img.numpy(), mode='L')
+        img = img.numpy()
+        img = Image.fromarray(np.dstack((img, img, img)))
 
         if self.transform is not None:
             img = self.transform(img)
         # img = torch.FloatTensor(img)
         # plt.imshow(img.numpy())
         # plt.show()
-        return torch.stack([img, img, img], 0).view(3, 32, 32)
+        # return torch.stack([img, img, img], 0).view(3, 32, 32)
+        return img
 
     def __len__(self):
         return self.imgs.size(-1)
