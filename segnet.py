@@ -55,9 +55,9 @@ class SegNet(nn.Module):
         return x
 
 
-def make_layers(cfg, batch_norm=False):
+def make_layers(cfg, in_channels=3, batch_norm=False):
     layers = []
-    in_channels = 3
+    # in_channels =
     for v in cfg:
         if v == 'M':
             layers += [nn.MaxPool2d(kernel_size=2, stride=2,
@@ -76,5 +76,5 @@ def make_layers(cfg, batch_norm=False):
 
 def make_segnet(out_dim=1024):
     base = make_layers(cfg['D'], batch_norm=True)
-    deconv = make_layers(cfg['F'], batch_norm=True)
+    deconv = make_layers(cfg['F'], in_channels=512, batch_norm=True)
     return SegNet(base, deconv, out_dim)
