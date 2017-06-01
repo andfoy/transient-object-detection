@@ -81,7 +81,7 @@ def make_layers(cfg, in_channels=3, batch_norm=False):
     return layers
 
 
-def make_segnet(out_dim=1024):
+def make_segnet(out_dim=3):
     base = make_layers(cfg['D'], batch_norm=True)
     deconv = make_layers(cfg['F'], in_channels=512, batch_norm=True)
     return SegNet(base, deconv, out_dim)
