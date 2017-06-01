@@ -45,6 +45,7 @@ class SegNet(nn.Module):
             if isinstance(layer, nn.MaxUnpool2d):
                 x = layer(x, ids[idx])
                 print(ids[idx])
+                print(x.size())
                 idx += 1
             else:
                 x = layer(x)
