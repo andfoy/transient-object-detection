@@ -412,8 +412,8 @@ class MainWindow(QWidget):
 
                 # img_id = int(i)
                 print(nom)
-                is_transient_btn.clicked.connect(lambda x=i: self.label_img(x, True))
-                not_transient_btn.clicked.connect(lambda x=i: self.label_img(x, False))
+                is_transient_btn.clicked.connect(lambda i=i: self.label_img(i, True))
+                not_transient_btn.clicked.connect(lambda i=i: self.label_img(i, False))
 
                 btn_layout.addWidget(is_transient_btn)
                 btn_layout.addWidget(not_transient_btn)
