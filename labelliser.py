@@ -405,20 +405,20 @@ class MainWindow(QWidget):
                 layout_tmp.addWidget(widget_cal_tmp)
                 layout_tmp.addWidget(widget_dif_tmp)
 
-                # btn_layout = QHBoxLayout(self)
-                # is_transient_btn = QPushButton('Yes', self)
-                # not_transient_btn = QPushButton('No', self)
+                btn_layout = QHBoxLayout()
+                is_transient_btn = QPushButton('Yes', self)
+                not_transient_btn = QPushButton('No', self)
 
-                # img_id = int(i)
-                # is_transient_btn.clicked.connect(lambda: self.label_img(img_id, True))
-                # not_transient_btn.clicked.connect(lambda: self.label_img(img_id, False))
+                img_id = int(i)
+                is_transient_btn.clicked.connect(lambda: self.label_img(img_id, True))
+                not_transient_btn.clicked.connect(lambda: self.label_img(img_id, False))
 
-                # btn_layout.addWidget(is_transient_btn)
-                # btn_layout.addWidget(not_transient_btn)
+                btn_layout.addWidget(is_transient_btn)
+                btn_layout.addWidget(not_transient_btn)
 
-                # general_layout = QVBoxLayout(self)
-                # general_layout.addLayout(layout_tmp)
-                # general_layout.addLayout(btn_layout)
+                general_layout = QVBoxLayout()
+                general_layout.addLayout(layout_tmp)
+                general_layout.addLayout(btn_layout)
                 self.layoutGauche.addLayout(layout_tmp)
 
         widget_CL_tmp = MatplotlibWidget(400, 400, None)
