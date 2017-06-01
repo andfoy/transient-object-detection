@@ -315,6 +315,7 @@ class MainWindow(QWidget):
 
     def passeImage(self):
         self.write_labels()
+        self.img_labels = {}
         exists = False
         while not exists:
             self.it_object = self.it_object + 1
