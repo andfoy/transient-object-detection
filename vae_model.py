@@ -21,7 +21,7 @@ class VAE(nn.Module):
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
-        self.cuda = cuda
+        self._cuda = cuda
 
     def encode(self, x):
         h1 = self.relu(self.fc1(x))
@@ -30,7 +30,7 @@ class VAE(nn.Module):
 
     def reparametrize(self, mu, logvar):
         std = logvar.mul(0.5).exp_()
-        if self.cuda:
+        if self._cuda:
             eps = torch.cuda.FloatTensor(std.size()).normal_()
         else:
             eps = torch.FloatTensor(std.size()).normal_()
