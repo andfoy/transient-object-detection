@@ -109,7 +109,7 @@ def test(epoch):
             data = data.cuda()
         data = Variable(data, volatile=True)
         recon = model(data)
-        loss = reconstruction_function(recon)
+        loss = reconstruction_function(recon, data)
         test_loss += loss.data[0]
         psnr = 10 * log10(1 / loss.data[0])
         avg_psnr += psnr
