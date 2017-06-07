@@ -109,7 +109,7 @@ if osp.exists(args.save):
 if args.cuda:
     model.cuda()
 
-reconstruction_function = nn.BCELoss()
+reconstruction_function = nn.MSELoss()
 reconstruction_function.size_average = False
 
 
