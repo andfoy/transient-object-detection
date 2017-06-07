@@ -30,6 +30,8 @@ parser.add_argument('--data', type=str,
                     help='Path to the folder that contains the images')
 parser.add_argument('--save', type=str, default='model_vae.pt',
                     help='path to save the final model')
+parser.add_argument('--gamma', default=0.1, type=float,
+                    help='Gamma update for SGD')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -58,12 +60,10 @@ class VAE(nn.Module):
         # self.conv1 = nn.Conv2d(1, 64, kernel_size=3)
         self.fc1 = nn.Linear(1024, 800)
         self.fc12 = nn.Linear(800, 500)
-        self.fc13 = nn.Linear(500, 300)
-        self.fc21 = nn.Linear(300, 100)
-        self.fc22 = nn.Linear(300, 100)
-        self.fc3 = nn.Linear(100, 300)
-        self.fc41 = nn.Linear(300, 500)
-        self.fc42 = nn.Linear(500, 800)
+        self.fc21 = nn.Linear(500, 100)
+        self.fc22 = nn.Linear(500, 100)
+        self.fc3 = nn.Linear(100, 500)
+        self.fc41 = nn.Linear(500, 800)
         self.fc4 = nn.Linear(800, 1024)
 
         self.relu = nn.ReLU()
@@ -72,7 +72,6 @@ class VAE(nn.Module):
     def encode(self, x):
         h1 = self.relu(self.fc1(x))
         h1 = self.relu(self.fc12(h1))
-        h1 = self.relu(self.fc13(h1))
         return self.fc21(h1), self.fc22(h1)
 
     def reparametrize(self, mu, logvar):
@@ -87,7 +86,6 @@ class VAE(nn.Module):
     def decode(self, z):
         h3 = self.relu(self.fc3(z))
         h3 = self.relu(self.fc41(h3))
-        h3 = self.relu(self.fc42(h3))
         return self.sigmoid(self.fc4(h3))
 
     def forward(self, x):
@@ -176,6 +174,17 @@ def test(epoch):
     return test_loss
 
 
+def adjust_learning_rate(optimizer, gamma, step):
+    """Sets the learning rate to the initial LR decayed
+       by 10 at every specified step
+       Adapted from PyTorch Imagenet example:
+       https://github.com/pytorch/examples/blob/master/imagenet/main.py
+    """
+    lr = args.lr * (gamma ** (step))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
+
 if __name__ == '__main__':
     if not load_ext:
         best_test_loss = None
@@ -191,6 +200,8 @@ if __name__ == '__main__':
                 with open(args.save, 'wb') as f:
                     torch.save(model.state_dict(), f)
                 best_test_loss = test_loss
+            else:
+                adjust_learning_rate(optimizer, args.gamma, epoch)
 
     except KeyboardInterrupt:
         print('-' * 89)
