@@ -34,6 +34,8 @@ parser.add_argument('--save', type=str, default='model_ext.pt',
                     help='path to save the final model')
 parser.add_argument('--gamma', default=0.1, type=float,
                     help='Gamma update for SGD')
+parser.add_argument('--anneal', action='store_true',
+                    help='Anneal learning rate')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -163,7 +165,8 @@ if __name__ == '__main__':
                     torch.save(model.state_dict(), f)
                 best_test_loss = test_loss
             else:
-                adjust_learning_rate(optimizer, args.gamma, epoch)
+                if args.anneal:
+                    adjust_learning_rate(optimizer, args.gamma, epoch)
 
     except KeyboardInterrupt:
         print('-' * 89)
