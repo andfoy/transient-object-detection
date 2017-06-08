@@ -105,6 +105,7 @@ def train(epoch):
             data = data.cuda()
         optimizer.zero_grad()
         recon_batch, mu, logvar = model(data)
+        recon_batch = recon_batch.view(-1, 1, 32, 32)
         loss = loss_function(recon_batch, data, mu, logvar)
         loss.backward()
         train_loss += loss.data[0]
@@ -127,6 +128,7 @@ def test(epoch):
             data = data.cuda()
         data = Variable(data, volatile=True)
         recon_batch, mu, logvar = model(data)
+        recon_batch = recon_batch.view(-1, 1, 32, 32)
         test_loss += loss_function(recon_batch, data, mu, logvar).data[0]
 
     test_loss /= len(test_loader.dataset)
