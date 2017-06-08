@@ -42,7 +42,7 @@ class VAE(nn.Module):
 
     def decode(self, z):
         h3 = self.relu(self.fc3(z))
-        h3 = self.relu(self.fc32(z))
+        h3 = self.relu(self.fc32(h3))
         h3 = self.relu(self.fc41(h3))
         return self.sigmoid(self.fc4(h3))
 
